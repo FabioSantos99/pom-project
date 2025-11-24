@@ -1,28 +1,24 @@
-import { Container } from './components/Container';
-import { Heading } from './components/Heading';
 import './styles/global.css';
 import './styles/theme.css';
+
+import { Container } from './components/Container';
+import { Heading } from './components/Heading';
+import { Logo } from './components/Logo';
+
 
 export function App() {
   return (
   <>
-  <Heading>
-    Testando Componente
-  </Heading>
   <Container>
-    <section>LOGO</section>
+    <Logo />
   </Container>
 
     <Container>
-    <section>Menu</section>
+    <Heading>Menu</Heading>
   </Container>
 
     <Container>
-    <section>Footer</section>
-  </Container>
-
-    <Container>
-    <section>LOGO</section>
+    <Heading>Footer</Heading>
   </Container>
   
   </>
