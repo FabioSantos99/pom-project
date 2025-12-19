@@ -10,16 +10,16 @@ export type HomeProps = {
 }
 
 
-export function Home(props: HomeProps) {
+export function Home() {
 
   return (
   <MainTemplate>
     <Container>
-      <CountDown {...props}/>
+      <CountDown/>
     </Container>
 
      <Container>
-      <MainForm {...props}/>
+      <MainForm />
     </Container>
 
   </MainTemplate>
