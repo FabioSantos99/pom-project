@@ -1,45 +1,18 @@
-
-import { useState } from 'react';
-import { Home } from './pages/Home';
+import { Home } from "./pages/Home";
+import { TaskContextProvider } from "./contexts/TaskContext";
 import './styles/global.css';
 import './styles/theme.css';
-import type { TaskStateModel } from './models/TaskStateModel';
-import { TaskContext } from './contexts/TaskContext';
 
-// export type TaskStateModel = {
-//   tasks: TaskModel[]; // histórico
-//   secondsRemaining: number;  // Home, CountDown, Histórico, MainForn,Button
-//   formattedSecondsRemaining: string; // Título, CountDown
-//   activeTask: TaskModel | null; // CountDown, Histórico, MainForm, Button
-//   currentCycle: number; // Home
-//   config: {
-//     workTime: number; // MainForm
-//     shortBreakTime: number; // MainForm
-//     longBreakTime: number; // MainForm
-//   };
-// };
-
-const initialState: TaskStateModel = {
-  tasks: [],
-  secondsRemaining: 0,
-  formattedSecondsRemaining: '00:00',
-  activeTask: null,
-  currentCycle: 0,
-  config:  {
-    workTime: 25,
-    shortBreakTime: 5,
-    longBreakTime: 15,
-  },
-}
 
 
 
 export function App() {
-  const [state, setState] = useState(initialState);
 
   return (
-  <TaskContext.Provider value={{ outraCoisa: 321}}>
+    <TaskContextProvider>
+
       <Home />
-  </TaskContext.Provider>
-  );
+
+    </TaskContextProvider>
+  )
 }
