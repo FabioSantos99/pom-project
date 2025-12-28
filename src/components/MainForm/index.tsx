@@ -2,11 +2,11 @@ import { PlayCircleIcon } from "lucide-react";
 import { DefaultButton } from "../DefaultButton";
 import { DefaultInput } from "../DefaultInput";
 import { Cycles } from "../Cycles";
-import { useTaskContext } from "../../contexts/TaskContext/useTaskContext";
-
+import { useState } from "react";
 
 export function MainForm() {
-  const { setState } = useTaskContext();
+
+  const [taskName, setTaskName] = useState('');
 
   // function handleClick() {
   //   setState(prevState => {
@@ -17,9 +17,13 @@ export function MainForm() {
   //   });
   // }
 
-  return (
+  function handleCreateNewTask(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    console.log('Deu certo', taskName);
+  }
 
-     <form className='form' action="">
+  return (
+     <form onSubmit={handleCreateNewTask} className='form' action="">
       {/* <button onClick={handleClick} type="button">Clicar</button> */}
       <div className='formRow'>
         <DefaultInput 
@@ -27,6 +31,8 @@ export function MainForm() {
         id='meuInput' 
         type='text'
         placeholder='Digite algo'
+        value={taskName}
+        onChange={(e) => setTaskName(e.target.value)}
        
         />
       </div>
