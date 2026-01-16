@@ -87,13 +87,13 @@ export function MainForm() {
      
       </div>
 
-      <div className='formRow'>
-        <Cycles />
-      </div>
+      {state.currentCycle > 0 && (
+        <div className='formRow'>
+          <Cycles />
+        </div>
+      )}
 
-      <div className='formRow'>
-        <button>Enviar</button>
-      </div>
+     
 
       <div className='formRow'>
         <DefaultButton icon={<PlayCircleIcon />} color='green'/>
