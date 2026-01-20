@@ -52,7 +52,6 @@ export function MainForm() {
         secondsRemaining, // Conferir
         formattedSecondsRemaining: formatSecondsToMinutes(secondsRemaining), // Conferir
         tasks: [...prevState.tasks, newTask],
-
       };
     });
   }
