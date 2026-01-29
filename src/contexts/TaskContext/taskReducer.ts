@@ -8,19 +8,8 @@ export function taskReducer(
   action: TaskActionModel,
 ): TaskStateModel {
   switch(action.type) {
-    case TaskActionTypes.START_TASK: {
-       // setState(prevState => {
-    //   return {
-    //     ...prevState,
-    //     config: {...prevState.config},
-    //     activeTask: newTask,
-    //     currentCycle: nextCycle, // conferir
-    //     secondsRemaining, // Conferir
-    //     formattedSecondsRemaining: formatSecondsToMinutes(secondsRemaining), // Conferir
-    //     tasks: [...prevState.tasks, newTask],
-    //   };
-    // });
 
+    case TaskActionTypes.START_TASK: {
     const newTask = action.payload;
     const nextCycle = getNextCycle(state.currentCycle);
     const secondsRemaining = newTask.duration * 60;
@@ -35,20 +24,7 @@ export function taskReducer(
       };
     }
     case TaskActionTypes.INTERRUPT_TASK: {
-      //     ...prevState,
-    //     activeTask:null,
-    //     secondsRemaining: 0,
-    //     formattedSecondsRemaining: '00:00',
-    //     tasks: prevState.tasks.map(task => {
-    //       if (prevState.activeTask && prevState.activeTask.id === task.id) {
-    //         // return { ...task, interruptDate: Date.now() }
-    //         return task;
-    //       }
-    //       return task;
-    //     }),
-      return state;
-    }
-    case TaskActionTypes.RESET_STATE: {
+      
       return {
         ...state,
         activeTask: null,
@@ -56,15 +32,27 @@ export function taskReducer(
         formattedSecondsRemaining: '00:00',
         tasks: state.tasks.map(task => {
           if (state.activeTask && state.activeTask.id === task.id) {
-            return { ...task, interruptDate: Date.now() }
+            return {...task, interruptDate: Date.now() };
           }
           return task;
         }),
+      };
+    }
+
+    case TaskActionTypes.RESET_STATE: {
+      return state;
         
+    }
+
+     case TaskActionTypes.COUNT_DOWN: {
+      return {
+        ...state,
+        secondsRemaining: action.payload.secondsRemaining,
+        formattedSecondsRemaining: formatSecondsToMinutes(action.payload.secondsRemaining,
+        ),
       };
     }
   }
-
   //Sempre deve retornar o estado
   return state;
 }
