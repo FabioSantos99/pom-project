@@ -1,3 +1,5 @@
+
+import { MessagesContainer } from "./components/MessagesContainer";
 import { TaskContextProvider } from "./contexts/TaskContext/TaskContextProvider";
 import { Home } from "./pages/Home";
 
@@ -6,14 +8,13 @@ import './styles/theme.css';
 
 
 
-
 export function App() {
 
   return (
     <TaskContextProvider>
-
-      <Home />
-
+      <MessagesContainer>
+        <Home />
+      </MessagesContainer>
     </TaskContextProvider>
   )
 }
