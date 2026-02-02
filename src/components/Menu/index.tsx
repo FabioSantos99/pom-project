@@ -1,7 +1,7 @@
 import { HistoryIcon, HouseIcon, MoonIcon, SettingsIcon, SunIcon } from 'lucide-react'
 import styles from './styles.module.css'
 import { useState, useEffect } from 'react'
-import { Link } from 'react-router';
+import { RouterLink } from '../RouterLink';
 
 
 type AvailableThemes = 'dark'|'light'
@@ -30,17 +30,7 @@ export function Menu() {
             const nextTheme = prevTheme == 'dark' ? 'light' : 'dark';
             return nextTheme;
         });
-
-      //  document.documentElement.setAttribute('data-theme', theme);
     }
-
-    // useEffect(() => {
-    //     console.log("useEffect sem denpendência", Date.now());
-    // }); // Executar todas vez que o componente renderiza na tela
-
-    // useEffect(() => {
-    //     console.log("useEffect com array deps vazio", Date.now());
-    // }, []); // Executa apenas quando o React monta o componente na tela pela primeira vez
 
     useEffect(() => {
         
@@ -51,30 +41,30 @@ export function Menu() {
     return (
     <nav className ={styles.menu}>
     
-        <Link
+        <RouterLink
             className={styles.menuLink} 
-            to="/" 
+            href="/" 
             aria-label="ir para Home" 
             title='Ir para a Home'>
                 <HouseIcon />
-        </Link>
+        </RouterLink>
 
 
-        <a className={styles.menuLink} 
+        <RouterLink className={styles.menuLink} 
         href="#"
         aria-label="ir para Histórico" 
         title='Ir para a Historico'>
             <HistoryIcon />
-        </a>
+        </RouterLink>
 
-        <a className={styles.menuLink} 
+        <RouterLink className={styles.menuLink} 
         href="#"
         aria-label="Configurações" 
         title='Configurações'>
             <SettingsIcon />
-        </a>
+        </RouterLink>
 
-        <a className={styles.menuLink} 
+        <RouterLink className={styles.menuLink} 
         href="#"
         aria-label="Mudar tema" 
         title='Mudar tema'
@@ -82,7 +72,7 @@ export function Menu() {
         >
 
             {nextThemeIcon[theme]}
-        </a>
+        </RouterLink>
     </nav>
     )
 }
