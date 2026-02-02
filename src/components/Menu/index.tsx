@@ -43,7 +43,7 @@ export function Menu() {
     // }, []); // Executa apenas quando o React monta o componente na tela pela primeira vez
 
     useEffect(() => {
-        console.log("Theme mudou", theme, Date.now());
+        
         document.documentElement.setAttribute('data-theme', theme);
         localStorage.setItem('theme', theme) 
     }, [theme]); // Executa apenas quando o valor de theme muda
