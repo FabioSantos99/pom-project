@@ -3,9 +3,11 @@ import { Container } from "../../components/Container";
 import { DefaultButton } from "../../components/DefaultButton";
 import { Heading } from "../../components/Heading";
 import { MainTemplate } from "../../templates/MainTemplates";
+import { useTaskContext } from "../../contexts/TaskContext/useTaskContext";
+import { formatDate } from "../../utils/formatDate";
 
 import styles from './styles.module.css';
-import { useTaskContext } from "../../contexts/TaskContext/useTaskContext";
+
 
 
 export function History() {
@@ -47,7 +49,7 @@ export function History() {
                 <tr key={task.id}>
                   <td>{task.name}</td>
                   <td>{task.duration}min</td>
-                  <td>{new Date().toISOString()}</td>
+                  <td>{formatDate(task.startDate)}</td>
                   <td>{task.interruptDate}</td>
                   <td>{task.type}</td>
                 </tr>
