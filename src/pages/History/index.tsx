@@ -9,13 +9,14 @@ import styles from './styles.module.css';
 import { getTaskStatus } from "../../utils/getTaskStatus";
 import { useEffect, useState } from "react";
 import { sortTasks, type SortTasksOptions } from "../../utils/sortTasks";
+import { showMessage } from "../../adapters/showMessage";
 import { TaskActionTypes } from "../../contexts/TaskContext/taskActions";
-
 
 
 export function History() {
 
   const { state, dispatch } = useTaskContext();
+  const [confirmClearHistory, setConfirmClearHistory] = useState(false);
   const hasTasks = state.tasks.length > 0;
 
   const [sortTaskOptions, setSortTaskOptions] = useState<SortTasksOptions>(
@@ -54,10 +55,27 @@ useEffect(() => {
   }));
 }, [state.tasks]);
 
-function handleResetHistory() {
-  if(!confirm('Tem certeza que deseja excluir o histórico')) return
+useEffect(() => {
+  if(!confirmClearHistory) return
+  
+  setConfirmClearHistory(false);
 
-  dispatch({ type: TaskActionTypes.RESET_STATE })
+  dispatch({ type: TaskActionTypes.RESET_STATE });
+
+}, [confirmClearHistory, dispatch]);
+
+useEffect(() => {
+  return () => {
+    showMessage.dismiss();
+  }
+}, [])
+
+
+function handleResetHistory() {
+  showMessage.dismiss()
+  showMessage.confirm('Tem certeza?', confirmation=>{
+    setConfirmClearHistory(confirmation);
+  });
 }
 
   return (
@@ -65,7 +83,7 @@ function handleResetHistory() {
     <Container>
       <Heading>
         <span>History</span>
-        {hasTasks && (
+        {hasTasks && ( 
         <span className={styles.buttonContainer}>
           <DefaultButton 
           icon={<TrashIcon />} 
