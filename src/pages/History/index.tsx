@@ -7,39 +7,87 @@ import { useTaskContext } from "../../contexts/TaskContext/useTaskContext";
 import { formatDate } from "../../utils/formatDate";
 import styles from './styles.module.css';
 import { getTaskStatus } from "../../utils/getTaskStatus";
-import { sortTasks } from "../../utils/sortTasks";
+import { useEffect, useState } from "react";
+import { sortTasks, type SortTasksOptions } from "../../utils/sortTasks";
+import { TaskActionTypes } from "../../contexts/TaskContext/taskActions";
 
 
 
 export function History() {
 
-  const {state} = useTaskContext();
-  const sortedTask = sortTasks({ tasks: state.tasks })
+  const { state, dispatch } = useTaskContext();
+  const hasTasks = state.tasks.length > 0;
+
+  const [sortTaskOptions, setSortTaskOptions] = useState<SortTasksOptions>(
+    () => {
+    return {
+      tasks: sortTasks({ tasks: state.tasks }),
+      field: 'startDate',
+      direction: 'desc',
+
+    };
+  },
+);
+
+function handleSortTasks({ field }: Pick<SortTasksOptions, 'field'>) {
+  const newDirection = sortTaskOptions.direction === 'desc' ? 'asc' : 'desc'
+
+  setSortTaskOptions({
+    tasks: sortTasks ({
+      direction: newDirection,
+      tasks: sortTaskOptions.tasks,
+      field,
+    }),
+    direction: newDirection,
+    field,
+  })
+};
+
+useEffect(() => {
+  setSortTaskOptions(prevState => ({
+    ...prevState,
+    tasks: sortTasks({
+      tasks: state.tasks,
+      direction: prevState.direction,
+      field: prevState.field,
+    }),
+  }));
+}, [state.tasks]);
+
+function handleResetHistory() {
+  if(!confirm('Tem certeza que deseja excluir o histórico')) return
+
+  dispatch({ type: TaskActionTypes.RESET_STATE })
+}
 
   return (
   <MainTemplate>
     <Container>
       <Heading>
         <span>History</span>
+        {hasTasks && (
         <span className={styles.buttonContainer}>
           <DefaultButton 
           icon={<TrashIcon />} 
           color="red"
           aria-label = 'Apagar todo o histórico'
           title='Apagar histórico'
+          onClick={handleResetHistory}
           />
         </span>
+      )}
       </Heading>
     </Container>
 
      <Container>
+      {hasTasks && (
       <div className={styles.responsiveTable}>
         <table>
           <thead>
             <tr>
-              <th>Tarefa</th>
-              <th>Duração</th>
-              <th>Data</th>
+              <th onClick={() => handleSortTasks({field: 'name'})} className={styles.thSort}>Tarefa</th>
+              <th onClick={() => handleSortTasks({field: 'duration'})} className={styles.thSort}>Duração</th>
+              <th onClick={() => handleSortTasks({field: 'startDate'})} className={styles.thSort}>Data</th>
               <th>Status</th>
               <th>Tipo</th>
             </tr>
@@ -47,7 +95,7 @@ export function History() {
 
           <tbody>
 
-            {sortedTask.map((task) => {
+            {sortTaskOptions.tasks.map((task) => {
 
               const taskTypeDictionary = {
                 workTime: "Foco",
@@ -68,6 +116,9 @@ export function History() {
           </tbody>
         </table>
       </div>
+      )}
+
+      {!hasTasks && <p style={ { textAlign: 'center', fontSize: '30px', fontWeight: 'bold', color: 'green' }}>Ainda não existem tarefas criadas.</p>}
     </Container>
   </MainTemplate>
   );
