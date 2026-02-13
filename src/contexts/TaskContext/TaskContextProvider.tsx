@@ -1,12 +1,12 @@
+
 import { useEffect, useReducer, useRef } from 'react';
 import { initialTaskState } from './initialTaskState';
 import { TaskContext } from './TaskContext';
 import { taskReducer } from './taskReducer';
 import { TimerWorkerManager } from '../../workers/TimeWorkerManage';
 import { TaskActionTypes } from './taskActions';
-import { loadBeep } from '../../workers/loadBeep';
+import { loadBeep } from '../../utils/loadBeep';
 import type { TaskStateModel } from '../../models/TaskStateModel';
-
 type TaskContextProviderProps = {
   children: React.ReactNode;
 };
@@ -24,24 +24,20 @@ export function TaskContextProvider({ children }: TaskContextProviderProps) {
       activeTask: null,
       secondsRemaining: 0,
       formattedSecondsRemaining: '00:00',
-    }
+    };
   });
-
   const playBeepRef = useRef<ReturnType<typeof loadBeep> | null>(null);
 
-
-  const worker = TimerWorkerManager.getInstance()
+  const worker = TimerWorkerManager.getInstance();
 
   worker.onmessage(e => {
-    const countDownSeconds = e.data
+    const countDownSeconds = e.data;
 
     if (countDownSeconds <= 0) {
-
-      if(playBeepRef.current) {
+      if (playBeepRef.current) {
         playBeepRef.current();
         playBeepRef.current = null;
       }
-
       dispatch({
         type: TaskActionTypes.COMPLETE_TASK,
       });
@@ -49,24 +45,21 @@ export function TaskContextProvider({ children }: TaskContextProviderProps) {
     } else {
       dispatch({
         type: TaskActionTypes.COUNT_DOWN,
-        payload: {secondsRemaining: countDownSeconds },
+        payload: { secondsRemaining: countDownSeconds },
       });
     }
   });
 
   useEffect(() => {
-
     localStorage.setItem('state', JSON.stringify(state));
 
-
-    if(!state.activeTask) {
+    if (!state.activeTask) {
       worker.terminate();
     }
 
     document.title = `${state.formattedSecondsRemaining} - Chronos Pomodoro`;
-    
-    worker.postMessage(state);
 
+    worker.postMessage(state);
   }, [worker, state]);
 
   useEffect(() => {
@@ -75,10 +68,7 @@ export function TaskContextProvider({ children }: TaskContextProviderProps) {
     } else {
       playBeepRef.current = null;
     }
-  
-  }, [state.activeTask]
-)
-  
+  }, [state.activeTask]);
 
   return (
     <TaskContext.Provider value={{ state, dispatch }}>
